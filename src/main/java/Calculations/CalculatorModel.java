@@ -8,6 +8,19 @@ public class CalculatorModel {
     BigInteger secondArgument;
     char sign;
     boolean calculate = false;
+    int system = 10;
+
+    public boolean isNumeric(String strNum) {
+        if (strNum == null) {
+            return false;
+        }
+        try {
+            int x = Integer.parseInt(strNum);
+        } catch (NumberFormatException nfe) {
+            return false;
+        }
+        return true;
+    }
 
     public BigInteger insertNumber(int number){
         if (!calculate){
@@ -16,7 +29,7 @@ public class CalculatorModel {
                 firstArgument = BigInteger.valueOf(number);
 
             else{
-                firstArgument = firstArgument.multiply(BigInteger.valueOf(10));
+                firstArgument = firstArgument.multiply(BigInteger.valueOf(system));
                 firstArgument = firstArgument.add(BigInteger.valueOf(number));
             }
 
@@ -27,7 +40,7 @@ public class CalculatorModel {
                 secondArgument = BigInteger.valueOf(number);
 
             else{
-                secondArgument = secondArgument.multiply(BigInteger.valueOf(10));
+                secondArgument = secondArgument.multiply(BigInteger.valueOf(system));
                 secondArgument = secondArgument.add(BigInteger.valueOf(number));
             }
 
@@ -48,8 +61,8 @@ public class CalculatorModel {
                 case 'X' -> firstArgument.multiply(secondArgument);
                 case '/' -> firstArgument.divide(secondArgument);
                 case '^' -> firstArgument.pow(secondArgument.intValue());
-                case '%' -> firstArgument.mod(secondArgument);
                 case 'N' -> nCr(firstArgument.intValue(), secondArgument.intValue());
+                case 'M' -> firstArgument.mod(secondArgument);
                 default -> throw new IllegalStateException("Unexpected value: " + sign);
             };
 
@@ -111,5 +124,13 @@ public class CalculatorModel {
         calculate = false;
 
         return result;
+    }
+
+    public void setSystem(int system) {
+        this.system = system;
+    }
+
+    public int getSystem() {
+        return system;
     }
 }

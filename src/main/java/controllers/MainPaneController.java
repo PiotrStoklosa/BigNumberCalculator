@@ -66,16 +66,35 @@ public class MainPaneController {
         Object source = digit.getSource();
         Button btn = (Button)source;
         String butSrcTxt = btn.getText();
-        int figure = Integer.parseInt(butSrcTxt);
-        BigInteger number = model.insertNumber(figure);
-        view.updateScreen(number);
+
+        int figure;
+        
+        if (model.isNumeric(butSrcTxt))
+            figure = Integer.parseInt(butSrcTxt);
+        
+        else{
+            figure = switch (butSrcTxt){
+                case "A" -> 10;
+                case "B" -> 11;
+                case "C" -> 12;
+                case "D" -> 13;
+                case "E" -> 14;
+                case "F" -> 15;
+                default -> throw new IllegalStateException("Unexpected value: " + butSrcTxt);
+            };
+        }
+        
+        if (figure < model.getSystem()) {
+            BigInteger number = model.insertNumber(figure);
+            view.updateScreen(number, model.getSystem());
+        }
 
     }
 
     public void calculate(){
         BigInteger result = model.calculate();
-        view.updateScreen(result);
-        view.updateAnswer(result);
+        view.updateScreen(result, model.getSystem());
+        view.updateAnswer(result, model.getSystem());
 
     }
 
@@ -95,9 +114,42 @@ public class MainPaneController {
     public void calculateOneArgumentOperation(){
 
         BigInteger result = model.calculateOneArgumentOperation();
-        view.updateScreen(result);
-        view.updateAnswer(result);
+        view.updateScreen(result, model.getSystem());
+        view.updateAnswer(result, model.getSystem());
     }
+
+    public void changeSystem(ActionEvent e){
+
+        Object source = e.getSource();
+        Button btn = (Button)source;
+        String butSrcTxt = btn.getText();
+
+        BigInteger result;
+        BigInteger ans;
+
+        if (screen.getText().equals(""))
+            result = BigInteger.ZERO;
+        else
+            result = new BigInteger(screen.getText(), model.getSystem());
+
+        if (answer.getText().equals(""))
+            ans = BigInteger.ZERO;
+        else
+            ans = new BigInteger(answer.getText(), model.getSystem());
+
+
+        if (butSrcTxt.equals("BINARY"))
+            model.setSystem(2);
+        if (butSrcTxt.equals("DECIMAL"))
+            model.setSystem(10);
+        if (butSrcTxt.equals("HEXADECIMAL"))
+            model.setSystem(16);
+
+        view.updateScreen(result, model.getSystem());
+        view.updateAnswer(ans, model.getSystem());
+    }
+
+
     public CalculatorView getView() {
         return view;
     }
