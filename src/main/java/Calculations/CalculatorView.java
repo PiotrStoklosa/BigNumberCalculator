@@ -3,7 +3,6 @@ package Calculations;
 import javafx.scene.control.Label;
 import java.math.BigInteger;
 
-
 public class CalculatorView{
 
     private static Label screen;
@@ -11,18 +10,14 @@ public class CalculatorView{
     Label operator;
     Label system;
 
-
     public CalculatorView(Label screen, Label answer, Label operator, Label system) {
+
         CalculatorView.screen = screen;
         CalculatorView.answer = answer;
         this.operator = operator;
         this.system = system;
-        system.setText("10");
-    }
+        system.setText("DECIMAL");
 
-    public static void outOfRangeInteger() {
-        screen.setText("Hmm wait, this exponent is too big :'(");
-        answer.setText("");
     }
 
     public void updateScreen(BigInteger number, int system){
@@ -50,17 +45,35 @@ public class CalculatorView{
     }
 
     public void updateSystem(int system) {
-        this.system.setText(Integer.toString(system));
+
+        if (system == 2)
+            this.system.setText("BINARY");
+        else if(system == 10)
+            this.system.setText("DECIMAL");
+        else if (system == 16)
+            this.system.setText("HEXADECIMAL");
+
     }
 
     public static void outOfRange(){
-        screen.setText("Hmm wait, I cannot store such a huge number :'(");
+
+        screen.setText("I can't store such a huge number");
         answer.setText("");
+
+    }
+
+    public static void outOfRangeInteger(String field) {
+
+        screen.setText("This " + field + " is too big");
+        answer.setText("");
+
     }
 
     public static void illegalExpressionInfo(){
-        screen.setText("Hmm wait, that's illegal!");
+
+        screen.setText("That's illegal!");
         answer.setText("");
+
     }
 
 }

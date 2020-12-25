@@ -6,6 +6,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.input.KeyEvent;
 
 import java.math.BigInteger;
 
@@ -55,14 +56,77 @@ public class MainPaneController {
         
         if (figure < model.getSystem()) {
             BigInteger number = model.insertNumber(figure);
+
             if (number != null)
                 view.updateScreen(number, model.getSystem());
+
             else{
+
                 model.reset();
                 view.updateOperator();
             }
         }
 
+    }
+
+    public void insertNumberByKeyboard(KeyEvent key){
+
+        String number = key.getText();
+        number = number.toLowerCase();
+
+        int figure;
+
+        if (model.isNumeric(number))
+            figure = Integer.parseInt(number);
+
+        else{
+
+            figure = switch (number){
+                case "a" -> 10;
+                case "b" -> 11;
+                case "c" -> 12;
+                case "d" -> 13;
+                case "e" -> 14;
+                case "f" -> 15;
+                default -> model.getSystem();
+            };
+
+        }
+
+        if (figure < model.getSystem()) {
+
+            BigInteger result = model.insertNumber(figure);
+
+            if (result != null)
+                view.updateScreen(result, model.getSystem());
+
+            else{
+
+                model.reset();
+                view.updateOperator();
+
+            }
+
+        }
+
+    }
+
+    public void operate(ActionEvent sign){
+
+        Object source = sign.getSource();
+        Button btn = (Button)source;
+        String op = btn.getText();
+        String butSrcTxt = op;
+
+        if (butSrcTxt.equals("nCr"))
+            butSrcTxt = "N";
+
+        char symbol = butSrcTxt.charAt(0);
+
+        if (model.operate(symbol))
+            view.updateOperator(op);
+
+        view.updateScreen();
     }
 
     public void calculate(){
@@ -73,34 +137,24 @@ public class MainPaneController {
             view.updateAnswer(result, model.getSystem());
         }
         else{
+
             model.reset();
+
         }
 
         view.updateOperator();
 
     }
 
-    public void operate(ActionEvent sign){
-        Object source = sign.getSource();
-        Button btn = (Button)source;
-        String op = btn.getText();
-        String butSrcTxt = op;
-        if (butSrcTxt.equals("nCr"))
-            butSrcTxt = "N";
-        char symbol = butSrcTxt.charAt(0);
-
-        if (model.operate(symbol))
-            view.updateOperator(op);
-
-        view.updateScreen();
-    }
-
     public void calculateOneArgumentOperation(){
 
         BigInteger result = model.calculateOneArgumentOperation();
+
         if (result == null){
+
             model.reset();
             view.updateOperator();
+
         }
         else {
             view.updateScreen(result, model.getSystem());
@@ -119,7 +173,7 @@ public class MainPaneController {
 
         String text = screen.getText();
 
-        if (!model.isNumeric(text))
+        if (!model.isNumericHex(text))
             result = BigInteger.ZERO;
         else
             result = new BigInteger(screen.getText(), model.getSystem());
@@ -131,20 +185,20 @@ public class MainPaneController {
 
         boolean outOfRange = false;
 
-        if (butSrcTxt.equals("BINARY")) {
+        if (butSrcTxt.equals("BIN")) {
             if (model.setSystem(2))
                 view.updateSystem(2);
             else
                 outOfRange = true;
 
         }
-        if (butSrcTxt.equals("DECIMAL")) {
+        if (butSrcTxt.equals("DEC")) {
             if (model.setSystem(10))
                 view.updateSystem(10);
             else
                 outOfRange = true;
         }
-        if (butSrcTxt.equals("HEXADECIMAL")) {
+        if (butSrcTxt.equals("HEX")) {
             if (model.setSystem(16))
                 view.updateSystem(16);
             else
@@ -161,8 +215,10 @@ public class MainPaneController {
     }
 
     public void delete(){
+
         BigInteger result = model.delete();
         view.updateScreen(result, model.getSystem());
+
     }
 
     public void reset(){
@@ -175,8 +231,10 @@ public class MainPaneController {
     }
 
     public void signChange(){
+
         BigInteger result = model.signChange();
         view.updateScreen(result, model.getSystem());
+
     }
 
 }
