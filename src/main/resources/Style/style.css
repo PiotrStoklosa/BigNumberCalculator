@@ -1,0 +1,56 @@
+
+.button{
+    -fx-font-family: Arial, Helvetica, Verdana, sans-serif;
+    -fx-font-size: 35;
+}
+
+.custom-button {
+    -fx-font-size: 24;
+    -fx-font-weight: 700px;
+    -fx-font-family: Arial, Helvetica, Verdana, sans-serif;
+}
+#modulo{
+    -fx-font-size: 24;
+}
+
+.numeral{
+    -fx-font-size: 40;
+    -fx-font-weight: 600px;
+    -fx-font-family: Arial, Helvetica, Verdana, sans-serif;
+}
+.anchorPane{
+    -fx-background-color: #232323;
+}
+#screen{
+    -fx-background-color: #505050;
+    -fx-border-color: #151515;
+    -fx-border-width: 7;
+    -fx-font-size: 24;
+    -fx-text-fill: black;
+    -fx-font-weight: bold;
+}
+#answer{
+    -fx-background-color: #505050;
+    -fx-border-color: #151515;
+    -fx-border-width: 7;
+    -fx-text-fill: black;
+    -fx-font-weight: bold;
+
+}
+.viewLabel{
+    -fx-text-fill: #DAA520;
+    -fx-opacity: .75;
+}
+#operator{
+    -fx-font-size: 40;
+    -fx-font-weight: 600px;
+    -fx-text-fill: red;
+    -fx-opacity: .50;
+}
+#system{
+    -fx-font-size: 40;
+    -fx-font-weight: 600px;
+    -fx-text-fill: red;
+    -fx-opacity: .50;
+    -fx-text-align: center;
+}
