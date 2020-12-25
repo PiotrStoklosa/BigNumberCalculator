@@ -1,7 +1,7 @@
 package controllers;
 
-import Calculations.CalculatorModel;
-import Calculations.CalculatorView;
+import calculations.CalculatorModel;
+import calculations.CalculatorView;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;

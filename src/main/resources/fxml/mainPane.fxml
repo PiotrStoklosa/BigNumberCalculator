@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<AnchorPane onKeyPressed="#insertNumberByKeyboard" prefHeight="870.0" prefWidth="630.0" styleClass="anchorPane" stylesheets="@../Style/style.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.MainPaneController">
+<AnchorPane onKeyPressed="#insertNumberByKeyboard" prefHeight="870.0" prefWidth="630.0" styleClass="anchorPane" stylesheets="@../style/style.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.MainPaneController">
     <Label fx:id="screen" layoutX="37.0" layoutY="33.0" prefHeight="126.0" prefWidth="556.0" />
     <Label fx:id="answer" layoutX="65.0" layoutY="166.0" prefHeight="34.0" prefWidth="528.0">
         <opaqueInsets>

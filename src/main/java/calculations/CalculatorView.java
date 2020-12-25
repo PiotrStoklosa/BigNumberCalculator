@@ -1,4 +1,4 @@
-package Calculations;
+package calculations;
 
 import javafx.scene.control.Label;
 import java.math.BigInteger;
