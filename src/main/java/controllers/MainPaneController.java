@@ -18,45 +18,14 @@ public class MainPaneController {
     private Label screen;
     @FXML
     private Label answer;
-
     @FXML
-    private Button[] digits;
+    private Label system;
     @FXML
-    private Button a;
-    @FXML
-    private Button b;
-    @FXML
-    private Button c;
-    @FXML
-    private Button d;
-    @FXML
-    private Button e;
-    @FXML
-    private Button f;
-    @FXML
-    private Button one;
-    @FXML
-    private Button two;
-    @FXML
-    private Button three;
-    @FXML
-    private Button four;
-    @FXML
-    private Button five;
-    @FXML
-    private Button six;
-    @FXML
-    private Button seven;
-    @FXML
-    private Button eight;
-    @FXML
-    private Button nine;
-    @FXML
-    private Button zero;
+    private Label operator;
 
     public void initialize(){
 
-        view = new CalculatorView(screen, answer);
+        view = new CalculatorView(screen, answer, operator, system);
         model = new CalculatorModel();
 
     }
@@ -86,27 +55,42 @@ public class MainPaneController {
         
         if (figure < model.getSystem()) {
             BigInteger number = model.insertNumber(figure);
-            view.updateScreen(number, model.getSystem());
+            if (number != null)
+                view.updateScreen(number, model.getSystem());
+            else{
+                model.reset();
+                view.updateOperator();
+            }
         }
 
     }
 
     public void calculate(){
         BigInteger result = model.calculate();
-        view.updateScreen(result, model.getSystem());
-        view.updateAnswer(result, model.getSystem());
+
+        if (result != null) {
+            view.updateScreen(result, model.getSystem());
+            view.updateAnswer(result, model.getSystem());
+        }
+        else{
+            model.reset();
+        }
+
+        view.updateOperator();
 
     }
 
     public void operate(ActionEvent sign){
         Object source = sign.getSource();
         Button btn = (Button)source;
-        String butSrcTxt = btn.getText();
+        String op = btn.getText();
+        String butSrcTxt = op;
         if (butSrcTxt.equals("nCr"))
             butSrcTxt = "N";
         char symbol = butSrcTxt.charAt(0);
 
-        model.operate(symbol);
+        if (model.operate(symbol))
+            view.updateOperator(op);
 
         view.updateScreen();
     }
@@ -114,8 +98,14 @@ public class MainPaneController {
     public void calculateOneArgumentOperation(){
 
         BigInteger result = model.calculateOneArgumentOperation();
-        view.updateScreen(result, model.getSystem());
-        view.updateAnswer(result, model.getSystem());
+        if (result == null){
+            model.reset();
+            view.updateOperator();
+        }
+        else {
+            view.updateScreen(result, model.getSystem());
+            view.updateAnswer(result, model.getSystem());
+        }
     }
 
     public void changeSystem(ActionEvent e){
@@ -127,7 +117,9 @@ public class MainPaneController {
         BigInteger result;
         BigInteger ans;
 
-        if (screen.getText().equals(""))
+        String text = screen.getText();
+
+        if (!model.isNumeric(text))
             result = BigInteger.ZERO;
         else
             result = new BigInteger(screen.getText(), model.getSystem());
@@ -137,24 +129,54 @@ public class MainPaneController {
         else
             ans = new BigInteger(answer.getText(), model.getSystem());
 
+        boolean outOfRange = false;
 
-        if (butSrcTxt.equals("BINARY"))
-            model.setSystem(2);
-        if (butSrcTxt.equals("DECIMAL"))
-            model.setSystem(10);
-        if (butSrcTxt.equals("HEXADECIMAL"))
-            model.setSystem(16);
+        if (butSrcTxt.equals("BINARY")) {
+            if (model.setSystem(2))
+                view.updateSystem(2);
+            else
+                outOfRange = true;
 
+        }
+        if (butSrcTxt.equals("DECIMAL")) {
+            if (model.setSystem(10))
+                view.updateSystem(10);
+            else
+                outOfRange = true;
+        }
+        if (butSrcTxt.equals("HEXADECIMAL")) {
+            if (model.setSystem(16))
+                view.updateSystem(16);
+            else
+                outOfRange = true;
+        }
+        if (!outOfRange) {
+            view.updateScreen(result, model.getSystem());
+            view.updateAnswer(ans, model.getSystem());
+        }
+        else {
+            model.reset();
+            view.updateOperator();
+        }
+    }
+
+    public void delete(){
+        BigInteger result = model.delete();
         view.updateScreen(result, model.getSystem());
-        view.updateAnswer(ans, model.getSystem());
     }
 
+    public void reset(){
 
-    public CalculatorView getView() {
-        return view;
+        model.reset();
+        view.updateScreen();
+        view.updateAnswer();
+        view.updateSystem(10);
+        view.updateOperator();
     }
 
-    public CalculatorModel getModel() {
-        return model;
+    public void signChange(){
+        BigInteger result = model.signChange();
+        view.updateScreen(result, model.getSystem());
     }
+
 }
